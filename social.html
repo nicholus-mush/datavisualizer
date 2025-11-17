@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Post Creator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4bb543;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --gray: #6c757d;
+            --border-radius: 12px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Card Styling */
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 i {
+            color: var(--primary);
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        textarea, input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
+        }
+
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-container input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px;
+            background: var(--light);
+            border: 2px dashed #ced4da;
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-input-label:hover {
+            background: #e9ecef;
+            border-color: var(--accent);
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* Button Styling */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #3d9436;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        /* Preview Styling */
+        .preview-container {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid #e1e8ed;
+            transition: var(--transition);
+        }
+
+        .preview-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e1e8ed;
+            display: flex;
+            align-items: center;
+            background: var(--light);
+        }
+
+        .preview-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .preview-user-info {
+            flex: 1;
+        }
+
+        .preview-username {
+            font-weight: bold;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .preview-timestamp {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .preview-content {
+            padding: 20px;
+        }
+
+        .preview-text {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .preview-caption {
+            color: var(--gray);
+            margin-bottom: 20px;
+            padding: 12px;
+            background: var(--light);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--accent);
+        }
+
+        .preview-media {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            text-align: center;
+            color: var(--gray);
+        }
+
+        .preview-media img, .preview-media video {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .preview-actions {
+            padding: 15px 20px;
+            border-top: 1px solid #e1e8ed;
+            display: flex;
+            justify-content: space-around;
+            color: var(--gray);
+            background: var(--light);
+        }
+
+        .preview-action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .preview-action:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--primary);
+        }
+
+        /* Social Media Buttons */
+        .social-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .bluesky { background: #0a7aff; }
+        .telegram { background: #0088cc; }
+        .facebook { background: #3b5998; }
+        .instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .github { background: #333; }
+        .twitter { background: #1da1f2; }
+        .linkedin { background: #0077b5; }
+
+        /* Platform Selection */
+        .platform-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .platform-checkbox {
+            display: none;
+        }
+
+        .platform-label {
+            padding: 10px 16px;
+            background: var(--light);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .platform-checkbox:checked + .platform-label {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        .hashtag {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .instructions {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--dark);
+            border-left: 4px solid var(--accent);
+        }
+
+        .character-count {
+            text-align: right;
+            font-size: 14px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .character-count.warning {
+            color: var(--warning);
+        }
+
+        .character-count.danger {
+            color: var(--danger);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--success);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .container {
+                gap: 20px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .social-buttons {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .preview-header {
+                padding: 12px 15px;
+            }
+            
+            .preview-content {
+                padding: 15px;
+            }
+            
+            .preview-actions {
+                padding: 12px 15px;
+            }
+            
+            .social-buttons {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-share-alt"></i> Social Media Post Creator</h1>
+        <p class="tagline">Create, preview, and share engaging content across all your social platforms</p>
+    </header>
+    
+    <div class="container">
+        <!-- Input Section -->
+        <div class="input-section">
+            <div class="card">
+                <h2><i class="fas fa-edit"></i> Create Your Post</h2>
+                
+                <div class="form-group">
+                    <label for="postText">Post Content</label>
+                    <textarea id="postText" placeholder="What would you like to share? You can use #hashtags to increase visibility..."></textarea>
+                    <div id="postTextCount" class="character-count">0/500</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="caption">Caption</label>
+                    <input type="text" id="caption" placeholder="Add an engaging caption for your post...">
+                    <div id="captionCount" class="character-count">0/150</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Upload Media</label>
+                    <div class="file-input-container">
+                        <input type="file" id="mediaUpload" accept="image/*, video/*">
+                        <label for="mediaUpload" class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Choose an image or video</span>
+                        </label>
+                    </div>
+                    <div id="fileName" class="file-name"></div>
+                </div>
+                
+                <div class="button-group">
+                    <button id="previewBtn" class="btn">
+                        <i class="fas fa-eye"></i> Preview Post
+                    </button>
+                    <button id="clearBtn" class="btn btn-secondary">
+                        <i class="fas fa-broom"></i> Clear All
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Platform Selection -->
+            <div class="card">
+                <h2><i class="fas fa-share-nodes"></i> Share to Platforms</h2>
+                <p>Select platforms to share your post:</p>
+                
+                <div class="platform-selection">
+                    <input type="checkbox" id="bluesky-check" class="platform-checkbox" checked>
+                    <label for="bluesky-check" class="platform-label">
+                        <i class="fab fa-bluesky"></i> Bluesky
+                    </label>
+                    
+                    <input type="checkbox" id="telegram-check" class="platform-checkbox" checked>
+                    <label for="telegram-check" class="platform-label">
+                        <i class="fab fa-telegram"></i> Telegram
+                    </label>
+                    
+                    <input type="checkbox" id="facebook-check" class="platform-checkbox" checked>
+                    <label for="facebook-check" class="platform-label">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </label>
+                    
+                    <input type="checkbox" id="instagram-check" class="platform-checkbox">
+                    <label for="instagram-check" class="platform-label">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </label>
+                    
+                    <input type="checkbox" id="github-check" class="platform-checkbox">
+                    <label for="github-check" class="platform-label">
+                        <i class="fab fa-github"></i> GitHub
+                    </label>
+                    
+                    <input type="checkbox" id="twitter-check" class="platform-checkbox" checked>
+                    <label for="twitter-check" class="platform-label">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </label>
+                    
+                    <input type="checkbox" id="linkedin-check" class="platform-checkbox">
+                    <label for="linkedin-check" class="platform-label">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </label>
+                </div>
+                
+                <div class="button-group">
+                    <button id="shareSelectedBtn" class="btn btn-success">
+                        <i class="fas fa-paper-plane"></i> Share to Selected
+                    </button>
+                    <button id="copyContentBtn" class="btn">
+                        <i class="fas fa-copy"></i> Copy Content
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Preview Section -->
+        <div class="preview-section">
+            <div class="card">
+                <h2><i class="fas fa-desktop"></i> Post Preview</h2>
+                <p>See how your post will look before sharing:</p>
+                
+                <div class="preview-container">
+                    <div class="preview-header">
+                        <div class="preview-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="preview-user-info">
+                            <div class="preview-username">Your Social Profile</div>
+                            <div class="preview-timestamp">Just now • <i class="fas fa-globe"></i> Public</div>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-content">
+                        <div id="previewText" class="preview-text">Your post content will appear here. Write something engaging to capture your audience's attention!</div>
+                        <div id="previewCaption" class="preview-caption">Your caption will appear here. Make it catchy!</div>
+                        <div id="previewMedia" class="preview-media">
+                            <i class="fas fa-image" style="font-size: 40px; margin-bottom: 10px;"></i>
+                            <p>Your image or video will appear here</p>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-actions">
+                        <div class="preview-action">
+                            <i class="far fa-heart"></i> Like
+                        </div>
+                        <div class="preview-action">
+                            <i class="far fa-comment"></i> Comment
+                        </div>
+                        <div class="preview-action">
+                            <i class="far fa-share-square"></i> Share
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Social Media Buttons -->
+            <div class="card">
+                <h2><i class="fas fa-rocket"></i> Quick Share</h2>
+                <p>Share your post directly to these platforms:</p>
+                
+                <div class="social-buttons">
+                    <a href="#" class="social-btn bluesky" data-platform="bluesky">
+                        <i class="fab fa-bluesky"></i> Bluesky
+                    </a>
+                    <a href="#" class="social-btn telegram" data-platform="telegram">
+                        <i class="fab fa-telegram"></i> Telegram
+                    </a>
+                    <a href="#" class="social-btn facebook" data-platform="facebook">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </a>
+                    <a href="#" class="social-btn instagram" data-platform="instagram">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="#" class="social-btn github" data-platform="github">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="#" class="social-btn twitter" data-platform="twitter">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </a>
+                    <a href="#" class="social-btn linkedin" data-platform="linkedin">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                </div>
+                
+                <div class="instructions">
+                    <p><strong>Pro Tip:</strong> For platforms that don't support direct media sharing, you'll need to manually upload your image/video when redirected. The text and caption will be pre-filled.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Post shared successfully!</span>
+    </div>
+
+    <script>
+        // DOM Elements
+        const postText = document.getElementById('postText');
+        const caption = document.getElementById('caption');
+        const mediaUpload = document.getElementById('mediaUpload');
+        const previewBtn = document.getElementById('previewBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const shareSelectedBtn = document.getElementById('shareSelectedBtn');
+        const copyContentBtn = document.getElementById('copyContentBtn');
+        const previewText = document.getElementById('previewText');
+        const previewCaption = document.getElementById('previewCaption');
+        const previewMedia = document.getElementById('previewMedia');
+        const socialButtons = document.querySelectorAll('.social-btn');
+        const fileName = document.getElementById('fileName');
+        const postTextCount = document.getElementById('postTextCount');
+        const captionCount = document.getElementById('captionCount');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        // Initialize the application
+        function init() {
+            // Add event listeners
+            previewBtn.addEventListener('click', updatePreview);
+            clearBtn.addEventListener('click', clearAll);
+            shareSelectedBtn.addEventListener('click', shareToSelectedPlatforms);
+            copyContentBtn.addEventListener('click', copyContentToClipboard);
+            
+            // Add event listeners to social buttons
+            socialButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    shareToPlatform(this.dataset.platform);
+                });
+            });
+            
+            // Add event listener for file input
+            mediaUpload.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    fileName.textContent = `Selected: ${this.files[0].name}`;
+                    updatePreview();
+                } else {
+                    fileName.textContent = '';
+                }
+            });
+            
+            // Add input event listeners for character counting
+            postText.addEventListener('input', updateCharacterCount);
+            caption.addEventListener('input', updateCharacterCount);
+            
+            // Initial preview update
+            updatePreview();
+            updateCharacterCount();
+        }
+
+        // Update character count for text inputs
+        function updateCharacterCount() {
+            const postTextLength = postText.value.length;
+            const captionLength = caption.value.length;
+            
+            postTextCount.textContent = `${postTextLength}/500`;
+            captionCount.textContent = `${captionLength}/150`;
+            
+            // Update styling based on character count
+            if (postTextLength > 450) {
+                postTextCount.classList.add('warning');
+                postTextCount.classList.remove('danger');
+            } else if (postTextLength > 480) {
+                postTextCount.classList.remove('warning');
+                postTextCount.classList.add('danger');
+            } else {
+                postTextCount.classList.remove('warning', 'danger');
+            }
+            
+            if (captionLength > 120) {
+                captionCount.classList.add('warning');
+                captionCount.classList.remove('danger');
+            } else if (captionLength > 140) {
+                captionCount.classList.remove('warning');
+                captionCount.classList.add('danger');
+            } else {
+                captionCount.classList.remove('warning', 'danger');
+            }
+        }
+
+        // Update the preview section with current input values
+        function updatePreview() {
+            // Update post text
+            if (postText.value.trim()) {
+                previewText.innerHTML = formatTextWithHashtags(postText.value);
+            } else {
+                previewText.textContent = "Your post content will appear here. Write something engaging to capture your audience's attention!";
+            }
+            
+            // Update caption
+            if (caption.value.trim()) {
+                previewCaption.textContent = caption.value;
+            } else {
+                previewCaption.textContent = "Your caption will appear here. Make it catchy!";
+            }
+            
+            // Update media preview
+            previewMedia.innerHTML = '';
+            if (mediaUpload.files.length > 0) {
+                const file = mediaUpload.files[0];
+                const fileURL = URL.createObjectURL(file);
+                
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.src = fileURL;
+                    img.alt = 'Uploaded image';
+                    previewMedia.appendChild(img);
+                } else if (file.type.startsWith('video/')) {
+                    const video = document.createElement('video');
+                    video.src = fileURL;
+                    video.controls = true;
+                    previewMedia.appendChild(video);
+                }
+            } else {
+                previewMedia.innerHTML = `
+                    <i class="fas fa-image" style="font-size: 40px; margin-bottom: 10px;"></i>
+                    <p>Your image or video will appear here</p>
+                `;
+            }
+        }
+
+        // Format text to highlight hashtags
+        function formatTextWithHashtags(text) {
+            // Simple regex to find hashtags (words starting with #)
+            return text.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>');
+        }
+
+        // Clear all input fields and reset preview
+        function clearAll() {
+            postText.value = '';
+            caption.value = '';
+            mediaUpload.value = '';
+            fileName.textContent = '';
+            
+            // Reset platform selection
+            document.querySelectorAll('.platform-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Re-check some default platforms
+            document.getElementById('bluesky-check').checked = true;
+            document.getElementById('telegram-check').checked = true;
+            document.getElementById('facebook-check').checked = true;
+            document.getElementById('twitter-check').checked = true;
+            
+            updatePreview();
+            updateCharacterCount();
+            
+            showToast('All fields cleared successfully');
+        }
+
+        // Share to selected platforms
+        function shareToSelectedPlatforms() {
+            const selectedPlatforms = [];
+            document.querySelectorAll('.platform-checkbox:checked').forEach(checkbox => {
+                selectedPlatforms.push(checkbox.id.replace('-check', ''));
+            });
+            
+            if (selectedPlatforms.length === 0) {
+                showToast('Please select at least one platform to share', 'warning');
+                return;
+            }
+            
+            // Show loading state
+            shareSelectedBtn.innerHTML = '<span class="spinner"></span> Sharing...';
+            shareSelectedBtn.disabled = true;
+            
+            // Simulate sharing process
+            setTimeout(() => {
+                selectedPlatforms.forEach(platform => {
+                    shareToPlatform(platform, false);
+                });
+                
+                // Reset button
+                shareSelectedBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Share to Selected';
+                shareSelectedBtn.disabled = false;
+                
+                showToast(`Post shared to ${selectedPlatforms.length} platform(s)`);
+            }, 1500);
+        }
+
+        // Share to a specific platform
+        function shareToPlatform(platform, showNotification = true) {
+            const text = postText.value || '';
+            const captionText = caption.value || '';
+            
+            // Combine text and caption for sharing
+            const shareText = text + (captionText ? `\n\n${captionText}` : '');
+            
+            // Platform-specific sharing URLs
+            const shareURLs = {
+                bluesky: `https://bsky.app/intent/compose?text=${encodeURIComponent(shareText)}`,
+                telegram: `https://t.me/share/url?url=&text=${encodeURIComponent(shareText)}`,
+                facebook: `https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(shareText)}`,
+                instagram: 'https://www.instagram.com/', // Instagram doesn't have a direct share URL
+                github: 'https://github.com/', // GitHub doesn't have a direct share URL
+                twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`,
+                linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=&summary=${encodeURIComponent(shareText)}`
+            };
+            
+            // Open the share URL in a new window
+            if (shareURLs[platform]) {
+                window.open(shareURLs[platform], '_blank', 'width=600,height=400');
+                if (showNotification) {
+                    showToast(`Shared to ${platform.charAt(0).toUpperCase() + platform.slice(1)}`);
+                }
+            } else {
+                alert(`Please manually share your content on ${platform.charAt(0).toUpperCase() + platform.slice(1)}.`);
+            }
+        }
+
+        // Copy content to clipboard
+        function copyContentToClipboard() {
+            const text = postText.value || '';
+            const captionText = caption.value || '';
+            
+            // Combine text and caption for sharing
+            const shareText = text + (captionText ? `\n\n${captionText}` : '');
+            
+            if (!shareText.trim()) {
+                showToast('No content to copy', 'warning');
+                return;
+            }
+            
+            // Use the Clipboard API to copy text
+            navigator.clipboard.writeText(shareText).then(() => {
+                showToast('Content copied to clipboard');
+            }).catch(err => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = shareText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('Content copied to clipboard');
+            });
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            toastMessage.textContent = message;
+            
+            // Change color based on type
+            if (type === 'warning') {
+                toast.style.background = 'var(--warning)';
+            } else if (type === 'danger') {
+                toast.style.background = 'var(--danger)';
+            } else {
+                toast.style.background = 'var(--success)';
+            }
+            
+            toast.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize the application when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
